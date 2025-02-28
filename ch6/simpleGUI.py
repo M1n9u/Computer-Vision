@@ -40,8 +40,7 @@ class videoGUI(QMainWindow):
         cv.imshow('Captured frame',self.capturedFrame)
         
     def saveFunction(self):
-        fname=QFileDialog.getSaveFileName(self,'파일 저장','./',self.tr("Images (*.jpg *.gif *.png *.xpm );; All Files(*.*)"))
-        print(fname)
+        fname=QFileDialog.getSaveFileName(self,'파일 저장','./',self.tr("Images (*.jpg);; All Files(*.*)"))
         cv.imwrite(fname[0],self.capturedFrame)
         
     def quitButtonFunction(self):
