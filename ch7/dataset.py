@@ -25,7 +25,7 @@ class_names = ['airplane','car','bird','cat','deer','dog','frog','horse','ship',
 for i in range(15,25):
     ax = fig.add_subplot(gs[i])
     ax.set_xticks([]); ax.set_yticks([])
-    ax.imshow(cifar_data[i],cmap='gray')
+    ax.imshow(cifar_data[i])
     ax.set_title(class_names[cifar_target[i]], fontsize=12)
 
 fig.show()
