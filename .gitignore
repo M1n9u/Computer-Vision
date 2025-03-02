@@ -2,3 +2,4 @@
 *.weights
 *.cfg
 *.pb
+cifar-10-python.tar.gz
