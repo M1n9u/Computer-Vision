@@ -36,9 +36,22 @@ layers = nn.Sequential(nn.Flatten(2,-1),
 # 학습
 model = mlp(layers)
 criterion = nn.MSELoss()
-optim = optim.SGD(model.parameters(),lr=0.01)
+optim = optim.Adam(model.parameters(),lr=0.001)
 n_epoch = 50
+
+def evaluate():
+    acc = 0.0
+    model.eval()
+    test_data, test_target = mnist_test.data.float(), mnist_test.targets.detach().numpy()
+    test_data = test_data.unsqueeze(1)
+    out = model(test_data).detach().numpy()
+    pred = np.argmax(out,axis=1)
+    acc = float(np.sum(pred==test_target))/float(len(test_data))*100.0
+    return acc
+
+model.train()
 total_loss = []
+total_acc = []
 for epoch in range(n_epoch):
     epoch_loss = 0.0
     count = 0
@@ -50,22 +63,21 @@ for epoch in range(n_epoch):
         optim.zero_grad()
         loss.backward()
         optim.step()
-        total_loss.append(loss.data)
+        
         epoch_loss += loss.data
         count += 1
-    print(f"Epoch= {epoch}/{n_epoch}, Loss= {epoch_loss/count}")
-
-plt.figure()
-plt.plot(range(len(total_loss)),total_loss)
-plt.title('Train Loss')
+    print(f"Epoch= {epoch+1}/{n_epoch}, Loss= {epoch_loss/count}")
+    val_acc = evaluate()
+    total_acc.append(val_acc)
+    total_loss.append(epoch_loss/count)
+    
+fig,ax = plt.subplots()
+ax.set_xlabel('Epochs')
+ax.set_ylabel('Train Loss (MSE)',color='tab:red')
+ax.plot(range(len(total_loss)),total_loss,'r')
+ax2 = ax.twinx()
+ax2.set_ylabel('Validation Accuracy (%)',color='tab:blue')
+ax2.plot(range(len(total_acc)),total_acc,'b')
+plt.title('Loss and Accuracy')
+fig.legend(['Train Loss','Validation Accuracy'])
 plt.show()
-
-# 평가
-acc = 0.0
-model.eval()
-test_data, test_target = mnist_test.data.float(), mnist_test.targets.detach().numpy()
-test_data = test_data.unsqueeze(1)
-out = model(test_data).detach().numpy()
-pred = np.argmax(out,axis=1)
-acc = float(np.sum(pred==test_target))/float(len(test_data))*100.0
-print('정확률= ',acc)
