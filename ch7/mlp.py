@@ -66,11 +66,13 @@ for epoch in range(n_epoch):
         
         epoch_loss += loss.data
         count += 1
-    print(f"Epoch= {epoch+1}/{n_epoch}, Loss= {epoch_loss/count}")
+    
     val_acc = evaluate()
     total_acc.append(val_acc)
     total_loss.append(epoch_loss/count)
+    print(f"Epoch= {epoch+1}/{n_epoch}, Loss= {epoch_loss/count}, Validation Accuracy= {val_acc}")
     
+torch.save(model.state_dict(),'./dmlp_trained.h5')
 fig,ax = plt.subplots()
 ax.set_xlabel('Epochs')
 ax.set_ylabel('Train Loss (MSE)',color='tab:red')
