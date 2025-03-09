@@ -19,3 +19,4 @@ MNIST/raw/train-images-idx3-ubyte
 MNIST/raw/train-images-idx3-ubyte.gz
 MNIST/raw/train-labels-idx1-ubyte
 MNIST/raw/train-labels-idx1-ubyte.gz
+/ch8/Stanford_dogs

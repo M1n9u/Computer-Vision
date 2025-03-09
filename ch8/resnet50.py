@@ -7,6 +7,7 @@ import requests
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 resnet50 = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+resnet50.to(device)
 
 url = "https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt"
 class_names = requests.get(url).text.splitlines()
@@ -16,7 +17,8 @@ img = np.array(img,dtype=np.float32) / 255.0
 mean=[0.485, 0.456, 0.406]; std=[0.229, 0.224, 0.225]
 trans = transforms.Compose([transforms.ToTensor(),transforms.Normalize(mean, std)])
 x = trans(cv.resize(img,(224,224),interpolation=cv.INTER_CUBIC)).unsqueeze(0)
-pred = resnet50(x)
+x.to(device)
+pred = resnet50(x).cpu()
 top5 = pred.topk(5,1,True,True)
 print(top5)
 
